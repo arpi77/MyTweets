@@ -66,8 +66,7 @@ namespace MyTweets
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Test}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
+                    pattern: "{controller=Test}/{action=Index}/{id?}");                
             });
         }
     }
