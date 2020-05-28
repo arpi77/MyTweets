@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.EntityFrameworkCore;
-using MyTweets.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,16 +26,7 @@ namespace MyTweets
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TweetDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<TweetDbContext>();
-            services.AddControllers();
-
-            services.AddSwaggerGen(s => {
-                s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "MyTweets Api", Version = "v1" });
-            });
+            services.InstallInstallers(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,7 +55,7 @@ namespace MyTweets
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Test}/{action=Index}/{id?}");                
+                    pattern: "{controller=Test}/{action=Index}/{id?}");
             });
         }
     }
