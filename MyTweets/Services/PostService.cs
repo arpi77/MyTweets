@@ -14,7 +14,7 @@ namespace MyTweets.Services
         {
             for (var i = 0; i < 5; i++)
             {
-                _posts.Add(new Post() { Id = Guid.NewGuid() });
+                _posts.Add(new Post() { Id = Guid.NewGuid(), Name = $"Name {i + 1}" });
             }
         }
 
@@ -26,6 +26,18 @@ namespace MyTweets.Services
         public Post GetById(Guid postId)
         {
             return _posts.SingleOrDefault(i => i.Id == postId);
+        }
+
+        public bool Update(Post postToUpdate)
+        {
+            bool exists = GetById(postToUpdate.Id) != null;
+
+            if (!exists) return false;
+
+            int index = _posts.FindIndex(p => p.Id == postToUpdate.Id);
+            _posts[index] = postToUpdate;
+
+            return true;
         }
     }
 }

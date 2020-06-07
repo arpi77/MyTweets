@@ -14,7 +14,7 @@ namespace MyTweets.Controllers
     public class PostsController : Controller
     {
         private readonly IPostService _postService;
-        
+
         public PostsController(IPostService postService)
         {
             _postService = postService;
@@ -32,6 +32,23 @@ namespace MyTweets.Controllers
             var post = _postService.GetById(postId);
 
             if (post == null)
+                return NotFound();
+
+            return Ok(post);
+        }
+
+        [HttpPost(ApiRouts.Posts.UpdateById)]
+        public IActionResult UpdatePost([FromRoute] Guid postId, [FromBody] UpdatePostRequest postToUpdate)
+        {
+            var post = new Post
+            {
+                Id = postId,
+                Name = postToUpdate.Name
+            };
+
+            var updated = _postService.Update(post);
+
+            if (!updated)
                 return NotFound();
 
             return Ok(post);
