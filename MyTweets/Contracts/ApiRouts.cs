@@ -17,6 +17,7 @@ namespace MyTweets.Contracts
             public const string Create = Base + "/posts";
             public const string GetById = Base + "/posts/{postId}";
             public const string UpdateById = Base + "/posts/{postId}";
+            public const string Delete = Base + "/posts/{postId}";
         }
     }
 }

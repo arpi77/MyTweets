@@ -37,7 +37,7 @@ namespace MyTweets.Controllers
             return Ok(post);
         }
 
-        [HttpPost(ApiRouts.Posts.UpdateById)]
+        [HttpPut(ApiRouts.Posts.UpdateById)]
         public IActionResult UpdatePost([FromRoute] Guid postId, [FromBody] UpdatePostRequest postToUpdate)
         {
             var post = new Post
@@ -52,6 +52,17 @@ namespace MyTweets.Controllers
                 return NotFound();
 
             return Ok(post);
+        }
+
+        [HttpDelete(ApiRouts.Posts.Delete)]
+        public IActionResult DeletePost([FromRoute] Guid postId)
+        {
+            var deleted = _postService.Delete(postId);
+
+            if (!deleted)
+                return NotFound();
+
+            return NoContent();
         }
 
         [HttpPost(ApiRouts.Posts.Create)]

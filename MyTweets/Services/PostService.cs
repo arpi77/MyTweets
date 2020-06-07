@@ -39,5 +39,15 @@ namespace MyTweets.Services
 
             return true;
         }
+
+        public bool Delete(Guid postId)
+        {
+            var post = GetById(postId);
+
+            if (post == null) return false;
+
+            _posts.Remove(post);
+            return true;
+        }
     }
 }

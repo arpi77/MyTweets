@@ -9,5 +9,6 @@ namespace MyTweets.Services
         List<Post> GetAll();
         Post GetById(Guid postId);
         bool Update(Post postToUpdate);
+        bool Delete(Guid postId);
     }
 }
