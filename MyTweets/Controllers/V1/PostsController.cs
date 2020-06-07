@@ -5,38 +5,54 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MyTweets.Contracts.Requests;
+using MyTweets.Contracts.Responses;
+using MyTweets.Services;
 
 namespace MyTweets.Controllers
 {
     public class PostsController : Controller
     {
-        private List<Post> _posts = new List<Post>();
-
-        public PostsController()
+        private readonly IPostService _postService;
+        
+        public PostsController(IPostService postService)
         {
-            for (var i = 0; i < 5; i++)
-            {
-                _posts.Add(new Post() { Id = Guid.NewGuid().ToString() });
-            }
+            _postService = postService;
         }
 
         [HttpGet(ApiRouts.Posts.GetAll)]
         public IActionResult GetAll()
         {
-            return Ok(_posts);
+            return Ok(_postService.GetAll());
+        }
+
+        [HttpGet(ApiRouts.Posts.GetById)]
+        public IActionResult Get([FromRoute] Guid postId)
+        {
+            var post = _postService.GetById(postId);
+
+            if (post == null)
+                return NotFound();
+
+            return Ok(post);
         }
 
         [HttpPost(ApiRouts.Posts.Create)]
-        public IActionResult Create([FromBody] Post post)
+        public IActionResult Create([FromBody] CreatePostRequest createPostRequest)
         {
-            if (string.IsNullOrEmpty(post.Id))
-                post.Id = Guid.NewGuid().ToString();
+            var post = new Post { Id = createPostRequest.Id };
 
-            _posts.Add(post);
+            if (createPostRequest.Id == Guid.Empty)
+                createPostRequest.Id = Guid.NewGuid();
+
+            _postService.GetAll().Add(post);
 
             string baseUri = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            string location = $"{baseUri}/{ApiRouts.Posts.GetById.Replace("{postId}", post.Id)}";
-            return Created(location, post);
+            string location = $"{baseUri}/{ApiRouts.Posts.GetById.Replace("{postId}", post.Id.ToString())}";
+
+            var postResponse = new PostResponse { Id = post.Id };
+
+            return Created(location, postResponse);
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyTweets.Data;
+using MyTweets.Services;
 
 namespace MyTweets
 {
@@ -15,6 +16,8 @@ namespace MyTweets
                     configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<TweetDbContext>();
+
+            services.AddSingleton<IPostService, PostService>();
         }
     }
 }
