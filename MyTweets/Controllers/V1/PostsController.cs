@@ -25,5 +25,18 @@ namespace MyTweets.Controllers
         {
             return Ok(_posts);
         }
+
+        [HttpPost(ApiRouts.Posts.Create)]
+        public IActionResult Create([FromBody] Post post)
+        {
+            if (string.IsNullOrEmpty(post.Id))
+                post.Id = Guid.NewGuid().ToString();
+
+            _posts.Add(post);
+
+            string baseUri = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+            string location = $"{baseUri}/{ApiRouts.Posts.GetById.Replace("{postId}", post.Id)}";
+            return Created(location, post);
+        }
     }
 }
