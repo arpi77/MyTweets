@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MyTweets.Services;
 
 namespace MyTweets
 {
@@ -18,6 +19,8 @@ namespace MyTweets
             configuration.GetSection(nameof(JwtOptions)).Bind(jwtOptions);
 
             services.AddSingleton(jwtOptions);
+
+            services.AddScoped<IIdentityService, IdentityService>();
 
             services.AddControllers();
 

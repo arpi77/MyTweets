@@ -40,6 +40,10 @@ namespace MyTweets
             {
                 app.UseHsts();
             }
+            
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseRouting();
 
             app.UseAuthentication();
 
@@ -49,16 +53,9 @@ namespace MyTweets
             app.UseSwagger(s => { s.RouteTemplate = swaggerOptions.JsonRoute; });
             app.UseSwaggerUI(s => s.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description));
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Test}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }
